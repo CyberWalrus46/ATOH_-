@@ -1,0 +1,11 @@
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\bin\Debug\net9.0\AtonTask.Domain.deps.json
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\bin\Debug\net9.0\AtonTask.Domain.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\bin\Debug\net9.0\AtonTask.Domain.pdb
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\obj\Debug\net9.0\AtonTask.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\obj\Debug\net9.0\AtonTask.Domain.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\obj\Debug\net9.0\AtonTask.Domain.AssemblyInfo.cs
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\obj\Debug\net9.0\AtonTask.Domain.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\obj\Debug\net9.0\AtonTask.Domain.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\obj\Debug\net9.0\refint\AtonTask.Domain.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\obj\Debug\net9.0\AtonTask.Domain.pdb
+C:\Users\User\source\repos\TestTasks\AtonTask.Domain\obj\Debug\net9.0\ref\AtonTask.Domain.dll

@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "ntPdGON78G5AE6jgEYRZBdJmMogGdDgBDX2lxFWsaIM=",
+  "Source": "AtonTask.API",
+  "BasePath": "_content/AtonTask.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

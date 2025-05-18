@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "AtonTask.Application/1.0.0": {
+        "dependencies": {
+          "AtonTask.Domain": "1.0.0"
+        },
+        "runtime": {
+          "AtonTask.Application.dll": {}
+        }
+      },
+      "AtonTask.Domain/1.0.0": {
+        "runtime": {
+          "AtonTask.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AtonTask.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AtonTask.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

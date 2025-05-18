@@ -1,0 +1,15 @@
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\bin\Debug\net9.0\AtonTask.Application.deps.json
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\bin\Debug\net9.0\AtonTask.Application.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\bin\Debug\net9.0\AtonTask.Application.pdb
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\bin\Debug\net9.0\AtonTask.Domain.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\bin\Debug\net9.0\AtonTask.Domain.pdb
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.Application.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.Application.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.Application.AssemblyInfo.cs
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.Application.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.C411EA8D.Up2Date
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.Application.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\refint\AtonTask.Application.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.Application.pdb
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\ref\AtonTask.Application.dll

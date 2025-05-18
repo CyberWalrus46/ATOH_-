@@ -1,0 +1,17 @@
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\bin\Debug\net9.0\AtonTask.Infrastucture.deps.json
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\bin\Debug\net9.0\AtonTask.Infrastucture.runtimeconfig.json
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\bin\Debug\net9.0\AtonTask.Infrastucture.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\bin\Debug\net9.0\AtonTask.Infrastucture.pdb
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\bin\Debug\net9.0\AtonTask.Domain.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\bin\Debug\net9.0\AtonTask.Domain.pdb
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\AtonTask.Infrastucture.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\AtonTask.Infrastucture.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\AtonTask.Infrastucture.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\AtonTask.Infrastucture.AssemblyInfo.cs
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\AtonTask.Infrastucture.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\AtonTask.7626ECE5.Up2Date
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\AtonTask.Infrastucture.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\refint\AtonTask.Infrastucture.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\AtonTask.Infrastucture.pdb
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\AtonTask.Infrastucture.genruntimeconfig.cache
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastucture\obj\Debug\net9.0\ref\AtonTask.Infrastucture.dll
