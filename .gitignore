@@ -1,0 +1,20 @@
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userprefs
+
+## Build results
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+
+## NuGet
+*.nupkg
+.nuget/
+packages/
+
+## Project files
+*.csproj.user
+*.csproj.orig

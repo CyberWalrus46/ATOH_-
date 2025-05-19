@@ -45,7 +45,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "AtonTask.API.DTOs.AdminCreateDto",
+        "Type": "AtonTask.API.DTOs.UserCreateDto",
         "IsRequired": true
       }
     ],

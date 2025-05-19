@@ -5,53 +5,83 @@ using System.Reflection;
 using AtonTask.Domain.Abstractions;
 using System.Security.Claims;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace AtonTask.API.DTOs
 {
-    //public class UserCreateDto
-    //{
-    //    public string Login { get; set; }
-    //    public string Password { get; set; }
-    //    public string Name { get; set; }
-    //    public int Gender { get; set; }
-    //    public DateTime? Birthday { get; set; }
-    //}
 
-    public class AdminCreateDto
+    public class UserCreateDto
     {
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
         public required string Login { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
         public required string Password { get; set; }
-        public string Name { get; set; }
-        public int Gender { get; set; }
-        public DateTime? Birthday { get; set; }
-        public bool? Admin { get; set; }
+
+        [RegularExpression(@"^[a-zA-Zа-яА-Я]+$")]
+        public required string Name { get; set; }
+        public required int Gender { get; set; }
+        public DateTime? Birthday { get; set; } = null;
+        public required bool Admin { get; set; }
+    }
+
+    public class UserResponseDto
+    {
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Login { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Password { get; set; }
+
+        [RegularExpression(@"^[a-zA-Zа-яА-Я]+$")]
+        public required string Name { get; set; }
+        public required int Gender { get; set; }
+        public required DateTime? Birthday { get; set; }
+        public required bool? Admin { get; set; }
     }
 
     public class ChangePersonalInfoDto
     {
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
         public required string Login { get; set; }
-        public string? Name { get; set; }
-        public int? Gender { get; set; }
-        public DateTime? Birthday { get; set; }
+
+        [RegularExpression(@"^[a-zA-Zа-яА-Я]+$")]
+        public string? Name { get; set; } = null;
+
+        public int? Gender { get; set; } = null;
+        public DateTime? Birthday { get; set; } = null;
     }
 
     public class UserLoginDto
     {
-        public string Login { get; set; }
-        public string Password { get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Login { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Password { get; set; }
     }
 
     public class ChangePasswordDto
     {
-        public string Login { get; set; }
-        public string OldPassword { get; set; }
-        public string NewPassword { get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Login { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string OldPassword { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string NewPassword { get; set; }
     }
 
     public class ChangeLoginDto
     {
-        public string OldLogin { get; set; }
-        public string NewLogin { get; set; }
-        public string Password { get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string OldLogin { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string NewLogin { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Password { get; set; }
     }
 }

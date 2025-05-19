@@ -11,19 +11,14 @@ namespace AtonTask.API.Controllers
 {
     [ApiController]
     [Route("api/users")]
-    public class UsersController(UserService userService) : ControllerBase
+    public class UsersController(IUserService _userService, IAuthService _authService) : ControllerBase
     {
         [HttpPost("create")]
-        [Authorize(Policy = "ActiveUser")]
-        public async Task<IActionResult> CreateUser([FromBody] AdminCreateDto dto)
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> CreateUser([FromBody] UserCreateDto dto)
         {
             try
             {
-                var isAdmin = User.IsInRole("Admin") || User.HasClaim("IsAdmin", "True");
-
-                if (!isAdmin && dto.Admin == true)
-                    return Forbid();
-
                 var user = new User
                 {
                     Login = dto.Login,
@@ -32,11 +27,12 @@ namespace AtonTask.API.Controllers
                     Gender = dto.Gender,
                     Birthday = dto.Birthday,
                     Admin = dto.Admin == true,
-                    CreatedBy = User.Identity?.Name ?? "user"
+                    CreatedBy = User.Identity?.Name ?? "system"
                 };
 
-                var createdUser = await userService.CreateUserAsync(user);
-                return CreatedAtAction(nameof(GetUser), new { login = createdUser.Login }, createdUser);
+                var createdUser = await _userService.CreateUserAsync(user);
+
+                return Ok("User was created");
             }
             catch (ArgumentException ex)
             {
@@ -48,77 +44,104 @@ namespace AtonTask.API.Controllers
         [Authorize(Policy = "ActiveUser")]
         public async Task<IActionResult> UpdateUser([FromBody] ChangePersonalInfoDto dto)
         {
-            var currentUser = User.Identity?.Name;
-            if (currentUser != dto.Login && !User.IsInRole("Admin"))
-                return Forbid();
-
-            var user = await userService.UpdateUserAsync(dto.Login, user =>
+            try
             {
-                if (dto.Name != null) user.Name = dto.Name;
-                if (dto.Gender.HasValue) user.Gender = dto.Gender.Value;
-                if (dto.Birthday.HasValue) user.Birthday = dto.Birthday;
-            }, currentUser!);
+                var currentUser = User.Identity?.Name;
+                if (currentUser != dto.Login && !User.IsInRole("Admin"))
+                    return Forbid();
 
-            return user != null ? Ok(user) : NotFound();
+                var user = await _userService.UpdateUserAsync(dto.Login, user =>
+                {
+                    if (dto.Name != null) user.Name = dto.Name;
+                    if (dto.Gender != null) user.Gender = dto.Gender.Value;
+                    if (dto.Birthday != null) user.Birthday = dto.Birthday;
+                }, currentUser!);
+                
+                return user != null ? Ok(user) : NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("update-1/changePassword")]
         [Authorize(Policy = "ActiveUser")]
         public async Task<IActionResult> UpdateUser([FromBody] ChangePasswordDto dto)
         {
-            var currentUser = User.Identity?.Name;
-            if (currentUser != dto.Login && !User.IsInRole("Admin"))
-                return Forbid();
-
             try
             {
-                if (!User.IsInRole("Admin"))
-                    await userService.GetUserByLoginAndPasswordAsync(dto.Login, dto.OldPassword);
-            }
-            catch (Exception ex)
-            {
-                BadRequest(ex);
-            }
+                var currentUser = User.Identity?.Name;
+                if (currentUser != dto.Login && !User.IsInRole("Admin"))
+                    return Forbid();
 
-            var user = await userService.UpdateUserAsync(dto.Login, user =>
+                if (!User.IsInRole("Admin"))
+                    await _userService.GetUserByLoginAndPasswordAsync(dto.Login, dto.OldPassword);
+
+                var user = await _userService.UpdateUserAsync(dto.Login, user =>
                 {
                     if (dto.NewPassword != null) user.Password = dto.NewPassword;
                 }, currentUser!);
 
-            return user != null ? Ok(user) : NotFound(); 
+                return user != null ? Ok(user) : NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("update-1/changeLogin")]
         [Authorize(Policy = "ActiveUser")]
         public async Task<IActionResult> UpdateUser([FromBody] ChangeLoginDto dto)
         {
-            var currentUser = User.Identity?.Name;
-            if (currentUser != dto.OldLogin && !User.IsInRole("Admin"))
-                return Forbid();
-
             try
             {
+                var currentUser = User.Identity?.Name;
+                if (currentUser != dto.OldLogin && !User.IsInRole("Admin"))
+                    return Forbid();
+
                 if (!User.IsInRole("Admin"))
-                    await userService.GetUserByLoginAndPasswordAsync(dto.OldLogin, dto.Password);
-            }
-            catch (Exception ex)
-            {
-                BadRequest(ex);
-            }
+                    await _userService.GetUserByLoginAndPasswordAsync(dto.OldLogin, dto.Password);
 
-            var user = await userService.UpdateUserAsync(dto.OldLogin, user =>
-            {
-                if (dto.NewLogin != null) user.Login = dto.NewLogin;
-            }, currentUser!);
+                var user = await _userService.UpdateUserAsync(dto.OldLogin, user =>
+                {
+                    if (dto.NewLogin != null) user.Login = dto.NewLogin;
+                }, currentUser!);
+                
+                if (user == null) return NotFound();
 
-            return user != null ? Ok(user) : NotFound();
+                var newToken = await _authService.GenerateJwtTokenAsync(user);
+                Response.Cookies.Delete("jwt");
+                Response.Cookies.Append("jwt", newToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.Now.AddMinutes(60)
+                });
+
+                return Ok(new
+                {
+                    User = user,
+                    Token = newToken
+                });
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("activeUsers")]
         [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetActiveUsers()
         {
-            var users = await userService.GetActiveUsersAsync();
+            var users = await _userService.GetActiveUsersAsync();
+
+            if (users == null) return NotFound();
+
             return Ok(users);
         }
 
@@ -126,9 +149,9 @@ namespace AtonTask.API.Controllers
         [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetUserByLogin(string login)
         {
-            var users = await userService.GetUserByLoginAsync(login);
+            var user = await _userService.GetUserByLoginAsync(login);
 
-            return Ok(users);
+            return Ok(user);
         }
 
         [HttpGet("getByLoginAndPassword")]
@@ -141,10 +164,10 @@ namespace AtonTask.API.Controllers
 
             try
             {
-                var user = await userService.GetUserByLoginAndPasswordAsync(login, password);
+                var user = await _userService.GetUserByLoginAndPasswordAsync(login, password);
                 return Ok(user);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return NotFound(ex.Message);
             }
@@ -154,8 +177,7 @@ namespace AtonTask.API.Controllers
         [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetUsersOlderThan(int age)
         {
-            
-            var users = await userService.GetUsersOlderThan(age);
+            var users = await _userService.GetUsersOlderThan(age);
 
             return Ok(users);
         }

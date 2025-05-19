@@ -7,16 +7,16 @@ namespace AtonTask.API.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthController(IAuthService authService) : ControllerBase
+    public class AuthController(IAuthService _authService) : ControllerBase
     {
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
         {
-            var user = await authService.ValidateCredentialsAsync(dto.Login, dto.Password);
+            var user = await _authService.ValidateCredentialsAsync(dto.Login, dto.Password);
             if (user == null)
                 return Unauthorized("Invalid credentials");
 
-            var token = await authService.GenerateJwtTokenAsync(user);
+            var token = await _authService.GenerateJwtTokenAsync(user);
 
             Response.Cookies.Append("jwt", token, new CookieOptions
             {

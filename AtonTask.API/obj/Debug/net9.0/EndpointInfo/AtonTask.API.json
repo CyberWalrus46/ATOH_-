@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "User Management API",
+    "title": "Aton Task API",
     "version": "v1"
   },
   "paths": {
@@ -57,17 +57,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AdminCreateDto"
+                "$ref": "#/components/schemas/UserCreateDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AdminCreateDto"
+                "$ref": "#/components/schemas/UserCreateDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AdminCreateDto"
+                "$ref": "#/components/schemas/UserCreateDto"
               }
             }
           }
@@ -258,53 +258,26 @@
   },
   "components": {
     "schemas": {
-      "AdminCreateDto": {
+      "ChangeLoginDto": {
         "required": [
-          "login",
+          "newLogin",
+          "oldLogin",
           "password"
         ],
         "type": "object",
         "properties": {
-          "login": {
-            "type": "string",
-            "nullable": true
-          },
-          "password": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "gender": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "birthday": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "admin": {
-            "type": "boolean",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ChangeLoginDto": {
-        "type": "object",
-        "properties": {
           "oldLogin": {
+            "pattern": "^[a-zA-Z0-9]+$",
             "type": "string",
             "nullable": true
           },
           "newLogin": {
+            "pattern": "^[a-zA-Z0-9]+$",
             "type": "string",
             "nullable": true
           },
           "password": {
+            "pattern": "^[a-zA-Z0-9]+$",
             "type": "string",
             "nullable": true
           }
@@ -312,17 +285,25 @@
         "additionalProperties": false
       },
       "ChangePasswordDto": {
+        "required": [
+          "login",
+          "newPassword",
+          "oldPassword"
+        ],
         "type": "object",
         "properties": {
           "login": {
+            "pattern": "^[a-zA-Z0-9]+$",
             "type": "string",
             "nullable": true
           },
           "oldPassword": {
+            "pattern": "^[a-zA-Z0-9]+$",
             "type": "string",
             "nullable": true
           },
           "newPassword": {
+            "pattern": "^[a-zA-Z0-9]+$",
             "type": "string",
             "nullable": true
           }
@@ -336,10 +317,12 @@
         "type": "object",
         "properties": {
           "login": {
+            "pattern": "^[a-zA-Z0-9]+$",
             "type": "string",
             "nullable": true
           },
           "name": {
+            "pattern": "^[a-zA-Zа-яА-Я]+$",
             "type": "string",
             "nullable": true
           },
@@ -356,14 +339,60 @@
         },
         "additionalProperties": false
       },
-      "UserLoginDto": {
+      "UserCreateDto": {
+        "required": [
+          "admin",
+          "gender",
+          "login",
+          "name",
+          "password"
+        ],
         "type": "object",
         "properties": {
           "login": {
+            "pattern": "^[a-zA-Z0-9]+$",
             "type": "string",
             "nullable": true
           },
           "password": {
+            "pattern": "^[a-zA-Z0-9]+$",
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "pattern": "^[a-zA-Zа-яА-Я]+$",
+            "type": "string",
+            "nullable": true
+          },
+          "gender": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "admin": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserLoginDto": {
+        "required": [
+          "login",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "login": {
+            "pattern": "^[a-zA-Z0-9]+$",
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "pattern": "^[a-zA-Z0-9]+$",
             "type": "string",
             "nullable": true
           }

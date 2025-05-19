@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AtonTask.Application.Services
 {
-    public class UserService(IUserRepository userRepository)
+    public class UserService(IUserRepository userRepository) : IUserService
     {
         public async Task<User> CreateUserAsync(User user)
         {
@@ -47,14 +47,13 @@ namespace AtonTask.Application.Services
             var user = await userRepository.GetByLoginAsync(login);
 
             if (user == null)
-                throw new Exception("Invalid login");
+                throw new ArgumentException("Invalid login");
 
             if (user.Password != password)
-                throw new Exception("Invalid login or password");
+                throw new ArgumentException("Invalid login or password");
 
             return user;
-        } 
-
+        }
 
         public async Task<IEnumerable<User>> GetUsersOlderThan(int age)
             => await userRepository.GetOlderThanAsync(age);
