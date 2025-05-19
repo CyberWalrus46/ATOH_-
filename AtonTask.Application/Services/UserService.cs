@@ -3,6 +3,7 @@ using AtonTask.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,31 @@ namespace AtonTask.Application.Services
         public async Task<User?> GetUserByIdAsync(Guid id)
             => await userRepository.GetByIdAsync(id);
 
+        public async Task<User?> GetUserByLoginAsync(string login)
+            => await userRepository.GetByLoginAsync(login);
+
+        public async Task<User?> GetUserByLoginAndPasswordAsync(string login, string password)
+        {
+            var user = await userRepository.GetByLoginAsync(login);
+
+            if (user == null)
+                throw new Exception("Invalid login");
+
+            if (user.Password != password)
+                throw new Exception("Invalid login or password");
+
+            return user;
+        } 
+
+
+        public async Task<IEnumerable<User>> GetUsersOlderThan(int age)
+            => await userRepository.GetOlderThanAsync(age);
+
+        public async Task DeleteUser(User user, bool softDelete, string revokedBy)
+            => await userRepository.DeleteAsync(user, softDelete, revokedBy);
+
+        public async Task RestoreUser(User user)
+            => await userRepository.RestoreAsync(user);
     }
 
 }

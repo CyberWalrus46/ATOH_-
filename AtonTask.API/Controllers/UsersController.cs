@@ -1,9 +1,11 @@
 ﻿using AtonTask.API.DTOs;
 using AtonTask.Application.Services;
+using AtonTask.Domain.Abstractions;
 using AtonTask.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace AtonTask.API.Controllers
 {
@@ -13,10 +15,15 @@ namespace AtonTask.API.Controllers
     {
         [HttpPost("create")]
         [Authorize(Policy = "ActiveUser")]
-        public async Task<IActionResult> CreateUser([FromBody] UserCreateDto dto)
+        public async Task<IActionResult> CreateUser([FromBody] AdminCreateDto dto)
         {
             try
             {
+                var isAdmin = User.IsInRole("Admin") || User.HasClaim("IsAdmin", "True");
+
+                if (!isAdmin && dto.Admin == true)
+                    return Forbid();
+
                 var user = new User
                 {
                     Login = dto.Login,
@@ -24,7 +31,7 @@ namespace AtonTask.API.Controllers
                     Name = dto.Name,
                     Gender = dto.Gender,
                     Birthday = dto.Birthday,
-                    Admin = false,
+                    Admin = dto.Admin == true,
                     CreatedBy = User.Identity?.Name ?? "user"
                 };
 
@@ -37,61 +44,69 @@ namespace AtonTask.API.Controllers
             }
         }
 
-        [HttpPost("create")]
-        [Authorize(Policy = "AdminOnly")]
-        public async Task<IActionResult> CreateUser([FromBody] AdminCreateDto dto)
-        {
-            try
-            {
-                var user = new User
-                {
-                    Login = dto.Login,
-                    Password = dto.Password,
-                    Name = dto.Name,
-                    Gender = dto.Gender,
-                    Birthday = dto.Birthday,
-                    Admin = dto.Admin,
-                    CreatedBy = User.Identity?.Name ?? "system"
-                };
-
-                var createdUser = await userService.CreateUserAsync(user);
-                return CreatedAtAction(nameof(GetUser), new { login = createdUser.Login }, createdUser);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        //[HttpPut("update-1/{login}")]
-        //[Authorize(Policy = "ActiveUser")]
-        //[Authorize(Policy = "AdminOnly")]
-        //public async Task<IActionResult> UpdateUser(string login, [FromBody] UserUpdateDto dto)
-        //{
-        //    var currentUser = User.Identity?.Name;
-        //    if (currentUser != login && !User.IsInRole("Admin"))
-        //        return Forbid();
-
-        //    var user = await userService.UpdateUserAsync(login, user =>
-        //    {
-        //        if (dto.Name != null) user.Name = dto.Name;
-        //        if (dto.Gender.HasValue) user.Gender = dto.Gender.Value;
-        //        if (dto.Birthday.HasValue) user.Birthday = dto.Birthday;
-        //    }, currentUser!);
-
-        //    return user != null ? Ok(user) : NotFound();
-        //}
-
-
-        [HttpPut("update-1/{login}")]
+        [HttpPut("update-1/changePersonalInfo")]
         [Authorize(Policy = "ActiveUser")]
-        public async Task<IActionResult> UpdateUser(string login, [FromBody] ChangeLoginDto dto)
+        public async Task<IActionResult> UpdateUser([FromBody] ChangePersonalInfoDto dto)
         {
             var currentUser = User.Identity?.Name;
-            if (currentUser != login && !User.IsInRole("Admin"))
+            if (currentUser != dto.Login && !User.IsInRole("Admin"))
                 return Forbid();
 
-            var user = await userService.UpdateUserAsync(login, user =>
+            var user = await userService.UpdateUserAsync(dto.Login, user =>
+            {
+                if (dto.Name != null) user.Name = dto.Name;
+                if (dto.Gender.HasValue) user.Gender = dto.Gender.Value;
+                if (dto.Birthday.HasValue) user.Birthday = dto.Birthday;
+            }, currentUser!);
+
+            return user != null ? Ok(user) : NotFound();
+        }
+
+        [HttpPut("update-1/changePassword")]
+        [Authorize(Policy = "ActiveUser")]
+        public async Task<IActionResult> UpdateUser([FromBody] ChangePasswordDto dto)
+        {
+            var currentUser = User.Identity?.Name;
+            if (currentUser != dto.Login && !User.IsInRole("Admin"))
+                return Forbid();
+
+            try
+            {
+                if (!User.IsInRole("Admin"))
+                    await userService.GetUserByLoginAndPasswordAsync(dto.Login, dto.OldPassword);
+            }
+            catch (Exception ex)
+            {
+                BadRequest(ex);
+            }
+
+            var user = await userService.UpdateUserAsync(dto.Login, user =>
+                {
+                    if (dto.NewPassword != null) user.Password = dto.NewPassword;
+                }, currentUser!);
+
+            return user != null ? Ok(user) : NotFound(); 
+        }
+
+        [HttpPut("update-1/changeLogin")]
+        [Authorize(Policy = "ActiveUser")]
+        public async Task<IActionResult> UpdateUser([FromBody] ChangeLoginDto dto)
+        {
+            var currentUser = User.Identity?.Name;
+            if (currentUser != dto.OldLogin && !User.IsInRole("Admin"))
+                return Forbid();
+
+            try
+            {
+                if (!User.IsInRole("Admin"))
+                    await userService.GetUserByLoginAndPasswordAsync(dto.OldLogin, dto.Password);
+            }
+            catch (Exception ex)
+            {
+                BadRequest(ex);
+            }
+
+            var user = await userService.UpdateUserAsync(dto.OldLogin, user =>
             {
                 if (dto.NewLogin != null) user.Login = dto.NewLogin;
             }, currentUser!);
@@ -99,65 +114,50 @@ namespace AtonTask.API.Controllers
             return user != null ? Ok(user) : NotFound();
         }
 
-        [HttpGet("{login}")]
-        public async Task<IActionResult> GetUser(string login)
+        [HttpGet("activeUsers")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> GetActiveUsers()
         {
-            var currentUserLogin = User.Identity?.Name;
-            var isAdmin = User.IsInRole("Admin");
-
-            if (!isAdmin && currentUserLogin != login)
-                return Forbid();
-
-            var user = userService.GetActiveUsersAsync();
-            return user != null ? Ok(User) : NotFound();
+            var users = await userService.GetActiveUsersAsync();
+            return Ok(users);
         }
 
+        [HttpGet("getByLogin")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> GetUserByLogin(string login)
+        {
+            var users = await userService.GetUserByLoginAsync(login);
+
+            return Ok(users);
+        }
+
+        [HttpGet("getByLoginAndPassword")]
+        [Authorize(Policy = "ActiveUser")]
+        public async Task<IActionResult> GetUser(string login, string password)
+        {
+            var currentUser = User.Identity?.Name;
+            if (currentUser != login || User.IsInRole("Admin"))
+                return Forbid();
+
+            try
+            {
+                var user = await userService.GetUserByLoginAndPasswordAsync(login, password);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("getOlderThan")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> GetUsersOlderThan(int age)
+        {
+            
+            var users = await userService.GetUsersOlderThan(age);
+
+            return Ok(users);
+        }
     }
 }
-
-//    [HttpGet]
-//    [Authorize(Policy = "AdminOnly")]
-//    public async Task<IActionResult> GetActiveUsers()
-//    {
-//        var users = await userService.GetActiveUsersAsync();
-//        return Ok(users);
-//    }
-
-
-//[HttpGet("{login}")]
-//public async Task<IActionResult> GetUser(string login)
-//{
-//    var currentUserLogin = User.Identity?.Name;
-//    var isAdmin = User.IsInRole("Admin");
-
-//    if (!isAdmin && currentUserLogin != login)
-//        return Forbid();
-
-//    return User != null ? Ok(User) : NotFound();
-//}
-
-//    [HttpGet("older-than/{age}")]
-//    [Authorize(Policy = "AdminOnly")]
-//    public async Task<IActionResult> GetUsersOlderThan(int age)
-//    {
-//        var users = await mediator.Send(new GetUsersOlderThanQuery(age));
-//        return Ok(users);
-//    }
-
-//    [HttpDelete("{login}")]
-//    [Authorize(Policy = "AdminOnly")]
-//    public async Task<IActionResult> DeleteUser(string login, [FromQuery] bool softDelete = true)
-//    {
-//        await mediator.Send(new DeleteUserCommand(login, softDelete, User.Identity?.Name!));
-//        return NoContent();
-//    }
-
-//    [HttpPatch("{login}/restore")]
-//    [Authorize(Policy = "AdminOnly")]
-//    public async Task<IActionResult> RestoreUser(string login)
-//    {
-//        await mediator.Send(new RestoreUserCommand(login, User.Identity?.Name!));
-//        return NoContent();
-//    }
-//}
-//}

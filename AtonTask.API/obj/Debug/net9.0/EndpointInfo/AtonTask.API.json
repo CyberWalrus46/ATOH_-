@@ -57,17 +57,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreateDto"
+                "$ref": "#/components/schemas/AdminCreateDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreateDto"
+                "$ref": "#/components/schemas/AdminCreateDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreateDto"
+                "$ref": "#/components/schemas/AdminCreateDto"
               }
             }
           }
@@ -79,20 +79,72 @@
         }
       }
     },
-    "/api/users/update-1/{login}": {
+    "/api/users/update-1/changePersonalInfo": {
       "put": {
         "tags": [
           "Users"
         ],
-        "parameters": [
-          {
-            "name": "login",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePersonalInfoDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePersonalInfoDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePersonalInfoDto"
+              }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/update-1/changePassword": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/update-1/changeLogin": {
+      "put": {
+        "tags": [
+          "Users"
         ],
         "requestBody": {
           "content": {
@@ -120,7 +172,19 @@
         }
       }
     },
-    "/api/users/{login}": {
+    "/api/users/activeUsers": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/getByLogin": {
       "get": {
         "tags": [
           "Users"
@@ -128,10 +192,59 @@
         "parameters": [
           {
             "name": "login",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/getByLoginAndPassword": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/getOlderThan": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "age",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -145,21 +258,11 @@
   },
   "components": {
     "schemas": {
-      "ChangeLoginDto": {
-        "type": "object",
-        "properties": {
-          "newLogin": {
-            "type": "string",
-            "nullable": true
-          },
-          "password": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserCreateDto": {
+      "AdminCreateDto": {
+        "required": [
+          "login",
+          "password"
+        ],
         "type": "object",
         "properties": {
           "login": {
@@ -177,6 +280,73 @@
           "gender": {
             "type": "integer",
             "format": "int32"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "admin": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChangeLoginDto": {
+        "type": "object",
+        "properties": {
+          "oldLogin": {
+            "type": "string",
+            "nullable": true
+          },
+          "newLogin": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "nullable": true
+          },
+          "oldPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChangePersonalInfoDto": {
+        "required": [
+          "login"
+        ],
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "gender": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
           "birthday": {
             "type": "string",

@@ -15,6 +15,7 @@ namespace AtonTask.Domain.Abstractions
         Task<IEnumerable<User>> GetOlderThanAsync(int age);
         Task AddAsync(User user);
         Task UpdateAsync(User user);
+        Task RestoreAsync(User user);
         Task DeleteAsync(User user, bool softDelete, string revokedBy);
         Task<bool> LoginExistsAsync(string login);
     }

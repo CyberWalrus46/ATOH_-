@@ -11,7 +11,7 @@ namespace AtonTask.API
     IConfiguration configuration,
     IUserRepository userRepository) : IAuthService
     {
-        public async Task<string> GenerateJwtTokenAsync(User user)
+        public Task<string> GenerateJwtTokenAsync(User user)
         {
             var claims = new[]
             {
@@ -36,7 +36,7 @@ namespace AtonTask.API
                 signingCredentials: creds
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
         public async Task<User?> ValidateCredentialsAsync(string login, string password)

@@ -27,18 +27,12 @@
   },
   {
     "ContainingType": "AtonTask.API.Controllers.UsersController",
-    "Method": "GetUser",
-    "RelativePath": "api/users/{login}",
+    "Method": "GetActiveUsers",
+    "RelativePath": "api/users/activeUsers",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "login",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -51,7 +45,76 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "AtonTask.API.DTOs.UserCreateDto",
+        "Type": "AtonTask.API.DTOs.AdminCreateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AtonTask.API.Controllers.UsersController",
+    "Method": "GetUserByLogin",
+    "RelativePath": "api/users/getByLogin",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "login",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AtonTask.API.Controllers.UsersController",
+    "Method": "GetUser",
+    "RelativePath": "api/users/getByLoginAndPassword",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "login",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "password",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AtonTask.API.Controllers.UsersController",
+    "Method": "GetUsersOlderThan",
+    "RelativePath": "api/users/getOlderThan",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "age",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AtonTask.API.Controllers.UsersController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/users/update-1/changeLogin",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "AtonTask.API.DTOs.ChangeLoginDto",
         "IsRequired": true
       }
     ],
@@ -60,19 +123,30 @@
   {
     "ContainingType": "AtonTask.API.Controllers.UsersController",
     "Method": "UpdateUser",
-    "RelativePath": "api/users/update-1/{login}",
+    "RelativePath": "api/users/update-1/changePassword",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "login",
-        "Type": "System.String",
+        "Name": "dto",
+        "Type": "AtonTask.API.DTOs.ChangePasswordDto",
         "IsRequired": true
-      },
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AtonTask.API.Controllers.UsersController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/users/update-1/changePersonalInfo",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
         "Name": "dto",
-        "Type": "AtonTask.API.DTOs.ChangeLoginDto",
+        "Type": "AtonTask.API.DTOs.ChangePersonalInfoDto",
         "IsRequired": true
       }
     ],

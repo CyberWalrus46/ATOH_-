@@ -1,6 +1,7 @@
 ﻿using AtonTask.Domain.Abstractions;
 using AtonTask.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace AtonTask.Infrastucture.Data
 
         public async Task<User?> GetByLoginAsync(string login)
             => await context.Users.FirstOrDefaultAsync(u => u.Login == login);
+
 
         public async Task<IEnumerable<User>> GetAllActiveAsync()
             => await context.Users.Where(u => u.RevokedOn == null)
@@ -38,7 +40,29 @@ namespace AtonTask.Infrastucture.Data
 
         public async Task UpdateAsync(User user)
         {
-            context.Users.Update(user);
+            try
+            {
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException pgEx)
+            {
+                switch (pgEx.SqlState)
+                {
+                    case PostgresErrorCodes.UniqueViolation:
+                        throw new Exception("Логин уже занят");
+                    case PostgresErrorCodes.NotNullViolation:
+                        throw new Exception("Обязательное поле не заполнено");
+                    default:
+                        throw new Exception("Ошибка при обновлении");
+                }
+            }
+        }
+
+        public async Task RestoreAsync(User user)
+        {
+            user.RevokedOn = null;
+            user.RevokedBy = null;
             await context.SaveChangesAsync();
         }
 

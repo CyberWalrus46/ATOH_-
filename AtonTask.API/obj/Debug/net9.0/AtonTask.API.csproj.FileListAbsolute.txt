@@ -296,3 +296,4 @@ C:\Users\User\source\repos\TestTasks\AtonTask.API\obj\Debug\net9.0\AtonTask.API.
 C:\Users\User\source\repos\TestTasks\AtonTask.API\obj\Debug\net9.0\AtonTask.API.genruntimeconfig.cache
 C:\Users\User\source\repos\TestTasks\AtonTask.API\obj\Debug\net9.0\ref\AtonTask.API.dll
 C:\Users\User\source\repos\TestTasks\AtonTask.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+C:\Users\User\source\repos\TestTasks\AtonTask.API\obj\Debug\net9.0\AtonTask.API.sourcelink.json

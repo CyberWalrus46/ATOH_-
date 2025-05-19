@@ -32,3 +32,4 @@ C:\Users\User\source\repos\TestTasks\AtonTask.Infrastructure\obj\Debug\net9.0\re
 C:\Users\User\source\repos\TestTasks\AtonTask.Infrastructure\obj\Debug\net9.0\AtonTask.Infrastructure.pdb
 C:\Users\User\source\repos\TestTasks\AtonTask.Infrastructure\obj\Debug\net9.0\AtonTask.Infrastructure.genruntimeconfig.cache
 C:\Users\User\source\repos\TestTasks\AtonTask.Infrastructure\obj\Debug\net9.0\ref\AtonTask.Infrastructure.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Infrastructure\obj\Debug\net9.0\AtonTask.Infrastructure.sourcelink.json

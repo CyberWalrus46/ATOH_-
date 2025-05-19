@@ -13,3 +13,4 @@ C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonT
 C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\refint\AtonTask.Application.dll
 C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.Application.pdb
 C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\ref\AtonTask.Application.dll
+C:\Users\User\source\repos\TestTasks\AtonTask.Application\obj\Debug\net9.0\AtonTask.Application.sourcelink.json
