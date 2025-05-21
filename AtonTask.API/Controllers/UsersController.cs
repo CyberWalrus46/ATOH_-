@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtonTask.API.Controllers
 {
@@ -13,7 +14,7 @@ namespace AtonTask.API.Controllers
     [Route("api/users")]
     public class UsersController(IUserService _userService, IAuthService _authService) : ControllerBase
     {
-        [HttpPost("create")]
+        [HttpPost]
         [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> CreateUser([FromBody] UserCreateDto dto)
         {
@@ -40,6 +41,7 @@ namespace AtonTask.API.Controllers
             }
         }
 
+
         [HttpPut("update-1/changePersonalInfo")]
         [Authorize(Policy = "ActiveUser")]
         public async Task<IActionResult> UpdateUser([FromBody] ChangePersonalInfoDto dto)
@@ -64,6 +66,7 @@ namespace AtonTask.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpPut("update-1/changePassword")]
         [Authorize(Policy = "ActiveUser")]
@@ -90,6 +93,7 @@ namespace AtonTask.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpPut("update-1/changeLogin")]
         [Authorize(Policy = "ActiveUser")]
@@ -134,37 +138,52 @@ namespace AtonTask.API.Controllers
             }
         }
 
+
         [HttpGet("activeUsers")]
         [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetActiveUsers()
         {
             var users = await _userService.GetActiveUsersAsync();
 
-            if (users == null) return NotFound();
+            if (users == null) 
+                return NotFound();
 
             return Ok(users);
         }
 
+
         [HttpGet("getByLogin")]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<IActionResult> GetUserByLogin(string login)
+        public async Task<IActionResult> GetUserByLogin(UserByLoginDto dto)
         {
-            var user = await _userService.GetUserByLoginAsync(login);
+            var user = await _userService.GetUserByLoginAsync(dto.Login);
 
-            return Ok(user);
+            if (user == null)
+                return NotFound();
+
+            var response = new UserResponseDto
+            {
+                Name = user.Name,
+                Gender = user.Gender,
+                Birthday = user.Birthday,
+                IsActive = user.IsActive
+            };
+
+            return Ok(response);
         }
+
 
         [HttpGet("getByLoginAndPassword")]
         [Authorize(Policy = "ActiveUser")]
-        public async Task<IActionResult> GetUser(string login, string password)
+        public async Task<IActionResult> GetByLoginAndPassword(GetUserByLoginAndPasswordDto dto)
         {
             var currentUser = User.Identity?.Name;
-            if (currentUser != login || User.IsInRole("Admin"))
+            if (currentUser != dto.Login || User.IsInRole("Admin"))
                 return Forbid();
 
             try
             {
-                var user = await _userService.GetUserByLoginAndPasswordAsync(login, password);
+                var user = await _userService.GetUserByLoginAndPasswordAsync(dto.Login, dto.Password);
                 return Ok(user);
             }
             catch (ArgumentException ex)
@@ -173,13 +192,51 @@ namespace AtonTask.API.Controllers
             }
         }
 
+
         [HttpGet("getOlderThan")]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<IActionResult> GetUsersOlderThan(int age)
+        public async Task<IActionResult> GetUsersOlderThan(GetUsersOlderThanDto dto)
         {
-            var users = await _userService.GetUsersOlderThan(age);
+            var users = await _userService.GetUsersOlderThan(dto.Age);
+
+            if (users == null)
+                return NotFound();
 
             return Ok(users);
+        }
+
+
+        [HttpDelete]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> DeleteUser(DeleteUserDto dto)
+        {
+            try
+            {
+                await _userService.DeleteUser(dto.Login, dto.SoftDelete, User.Identity?.Name ?? "system");
+
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPut("restore")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> RestoreUser(UserByLoginDto dto)
+        {
+            try
+            {
+                await _userService.RestoreUser(dto.Login);
+
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

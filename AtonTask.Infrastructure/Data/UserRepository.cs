@@ -50,11 +50,11 @@ namespace AtonTask.Infrastucture.Data
                 switch (pgEx.SqlState)
                 {
                     case PostgresErrorCodes.UniqueViolation:
-                        throw new Exception("Логин уже занят");
+                        throw new Exception("Login already exists");
                     case PostgresErrorCodes.NotNullViolation:
-                        throw new Exception("Обязательное поле не заполнено");
+                        throw new Exception("Required field is empty");
                     default:
-                        throw new Exception("Ошибка при обновлении");
+                        throw new Exception($"Database error: {pgEx.Message}");
                 }
             }
         }

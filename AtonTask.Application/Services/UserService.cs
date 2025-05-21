@@ -13,6 +13,7 @@ namespace AtonTask.Application.Services
     {
         public async Task<User> CreateUserAsync(User user)
         {
+
             if (await userRepository.LoginExistsAsync(user.Login))
                 throw new ArgumentException("Login already exists");
 
@@ -58,11 +59,25 @@ namespace AtonTask.Application.Services
         public async Task<IEnumerable<User>> GetUsersOlderThan(int age)
             => await userRepository.GetOlderThanAsync(age);
 
-        public async Task DeleteUser(User user, bool softDelete, string revokedBy)
-            => await userRepository.DeleteAsync(user, softDelete, revokedBy);
+        public async Task DeleteUser(string login, bool softDelete, string revokedBy)
+        {
+            var user = await userRepository.GetByLoginAsync(login);
 
-        public async Task RestoreUser(User user)
-            => await userRepository.RestoreAsync(user);
+            if (user == null)
+                throw new ArgumentException("User doesn't exist");
+
+            await userRepository.DeleteAsync(user, softDelete, revokedBy);
+        }
+
+        public async Task RestoreUser(string login)
+        {
+            var user = await userRepository.GetByLoginAsync(login);
+
+            if (user == null)
+                throw new ArgumentException("User doesn't exist");
+
+            await userRepository.RestoreAsync(user);
+        }
     }
 
 }

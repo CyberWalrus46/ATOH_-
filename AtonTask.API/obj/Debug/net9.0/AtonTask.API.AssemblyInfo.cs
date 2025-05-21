@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AtonTask.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+07e41eb1ab686acabf0e24fdac16c373a7850949")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82dc099fbc7c887b48f9d950bbe1ef03544eb177")]
 [assembly: System.Reflection.AssemblyProductAttribute("AtonTask.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AtonTask.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -27,17 +27,10 @@ namespace AtonTask.API.DTOs
 
     public class UserResponseDto
     {
-        [RegularExpression(@"^[a-zA-Z0-9]+$")]
-        public required string Login { get; set; }
-
-        [RegularExpression(@"^[a-zA-Z0-9]+$")]
-        public required string Password { get; set; }
-
-        [RegularExpression(@"^[a-zA-Zа-яА-Я]+$")]
         public required string Name { get; set; }
         public required int Gender { get; set; }
         public required DateTime? Birthday { get; set; }
-        public required bool? Admin { get; set; }
+        public required bool IsActive { get; set; }
     }
 
     public class ChangePersonalInfoDto
@@ -84,4 +77,33 @@ namespace AtonTask.API.DTOs
         [RegularExpression(@"^[a-zA-Z0-9]+$")]
         public required string Password { get; set; }
     }
+
+    public class UserByLoginDto
+    {
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Login { get; set; }
+    }
+
+    public class GetUserByLoginAndPasswordDto
+    {
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Login { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Password { get; set; }
+    }
+
+    public class GetUsersOlderThanDto
+    {
+        public required int Age { get; set; }
+    }
+
+    public class DeleteUserDto
+    {
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
+        public required string Login { get; set; }
+
+        public required bool SoftDelete { get; set; }
+    }
+
 }
